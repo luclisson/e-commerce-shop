@@ -14,7 +14,7 @@ export default function LoginModal({ isOpen, onClose }) {
         
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors">
+          className="absolute bg-stone-100 text-stone-900 top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors">
           ✕
         </button>
 
@@ -28,7 +28,7 @@ export default function LoginModal({ isOpen, onClose }) {
             <label className="block text-sm font-bold text-stone-700 mb-1">E-Mail</label>
             <input 
               type="email" 
-              className="w-full border border-stone-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all"
+              className="w-full bg-white text-stone-900 border border-stone-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all"
               placeholder="barista@beispiel.de"
             />
           </div>
@@ -37,7 +37,7 @@ export default function LoginModal({ isOpen, onClose }) {
             <label className="block text-sm font-bold text-stone-700 mb-1">Passwort</label>
             <input 
               type="password" 
-              className="w-full border border-stone-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all"
+              className="w-full bg-white text-stone-900 border border-stone-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all"
               placeholder="••••••••"
             />
           </div>
