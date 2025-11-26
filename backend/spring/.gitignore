@@ -25,9 +25,18 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+.build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore docker-compose files and postgres artifacts
+../docker-compose.yaml
+# SQL dump files
+../luc_dump_25112025.sql
+../dump.sql
+../*.sql
+# Postgres data directories created by docker-compose or local setups
+../pg_data

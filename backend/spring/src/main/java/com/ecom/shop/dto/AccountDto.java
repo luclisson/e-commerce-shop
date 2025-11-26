@@ -10,9 +10,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDto {
-    String addressId;
-    String name;
+    String firstName;
+    String lastName;
     String email;
     Date birthday;
+    String gender;
+    Boolean isGuest;
 }
 

@@ -10,10 +10,12 @@ public class DtoMapperService {
     public AccountDto toAccountDto(Account a) {
         if (a == null) return null;
         return new AccountDto(
-                a.getAddressId(),
-                a.getName(),
+                a.getFirstName(),
+                a.getLastName(),
                 a.getEmail(),
-                a.getBirthday()
+                a.getBirthday(),
+                a.getGender(),
+                a.getIsGuest()
         );
     }
 
@@ -36,7 +38,6 @@ public class DtoMapperService {
     public CredentialsDto toCredentialsDto(Credentials c) {
         if (c == null) return null;
         return new CredentialsDto(
-                c.getAccountId(),
                 c.getUsername(),
                 c.getPassword(),
                 c.getLastLogin()
