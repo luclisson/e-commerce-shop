@@ -4,6 +4,8 @@ import com.ecom.shop.dto.*;
 import com.ecom.shop.entity.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class DtoMapperService {
 
