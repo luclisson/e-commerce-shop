@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function LoginModal({ isOpen, onClose }) {
   if (!isOpen) return null;
@@ -14,7 +15,7 @@ export default function LoginModal({ isOpen, onClose }) {
         
         <button 
           onClick={onClose}
-          className="absolute bg-stone-100 text-stone-900 top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors">
+          className="absolute bg-stone-100 top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors">
           ✕
         </button>
 
@@ -50,7 +51,14 @@ export default function LoginModal({ isOpen, onClose }) {
         </form>
 
         <div className="mt-6 text-center text-sm text-stone-500">
-          Noch kein Konto? <a href="#" className="text-orange-600 font-bold hover:underline">Registrieren</a>
+          Noch kein Konto?{' '}
+          <Link 
+            to="/register" 
+            onClick={onClose} 
+            className="text-orange-600 font-bold hover:underline"
+          >
+            Registrieren
+          </Link>
         </div>
 
       </div>
