@@ -10,9 +10,9 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name="account-credentials")
+@Table(name="account_credentials")
 public class Credentials {
-    @Column
+    @Column(name = "credentials_id")
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private int credentialId;
@@ -23,7 +23,7 @@ public class Credentials {
     @Column
     private String username;
 
-    @Column
+    @Column(name = "password_hash")
     private String password;
 
     @Column(name = "last_login")

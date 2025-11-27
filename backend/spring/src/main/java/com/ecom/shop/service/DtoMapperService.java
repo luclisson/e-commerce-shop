@@ -4,6 +4,8 @@ import com.ecom.shop.dto.*;
 import com.ecom.shop.entity.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class DtoMapperService {
 
@@ -47,8 +49,6 @@ public class DtoMapperService {
     public OfferDto toOfferDto(Offer o) {
         if (o == null) return null;
         return new OfferDto(
-                o.getProductId(),
-                o.getAccountId(),
                 o.getOfferPrice(),
                 o.getOfferAmount(),
                 o.getOfferTitle()
@@ -68,8 +68,6 @@ public class DtoMapperService {
     public OrderOfferDto toOrderOfferDto(OrderOffer oo) {
         if (oo == null) return null;
         return new OrderOfferDto(
-                oo.getOrderId(),
-                oo.getOfferId(),
                 oo.getQuantity()
         );
     }
@@ -77,8 +75,6 @@ public class DtoMapperService {
     public ProductDto toProductDto(Product p) {
         if (p == null) return null;
         return new ProductDto(
-                p.getCategoryId(),
-                p.getAccountId(),
                 p.getDescription(),
                 p.getPrice(),
                 p.getAmount(),
@@ -91,7 +87,6 @@ public class DtoMapperService {
     public ProductImageDto toProductImageDto(ProductImage pi) {
         if (pi == null) return null;
         return new ProductImageDto(
-                pi.getProductId(),
                 pi.getImageUrl(),
                 pi.getText(),
                 pi.getSortOrder(),
@@ -102,8 +97,6 @@ public class DtoMapperService {
     public ProductOfferDto toProductOfferDto(ProductOffer po) {
         if (po == null) return null;
         return new ProductOfferDto(
-                po.getOfferId(),
-                po.getProductId(),
                 po.getQuantity()
         );
     }

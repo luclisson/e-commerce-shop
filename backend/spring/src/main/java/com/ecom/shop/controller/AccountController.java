@@ -4,6 +4,7 @@ import com.ecom.shop.dto.AccountCreationDto;
 import com.ecom.shop.dto.CredentialsDto;
 import com.ecom.shop.entity.Account;
 import com.ecom.shop.service.AccountService;
+import com.ecom.shop.service.CredentialService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.apache.bcel.classfile.JavaClass;
 import org.jboss.logging.Logger;
@@ -18,6 +19,7 @@ import java.sql.Date;
 public class AccountController {
     private static final Logger logger = Logger.getLogger(JavaClass.class.getName());
     private final AccountService accountService;
+    private final CredentialService credentialService;
 
     @GetMapping("/getAccountById/{id}")
     public Optional<Account> getAccountById(@PathVariable int id){
@@ -45,6 +47,8 @@ public class AccountController {
     @PostMapping("/validateLogin")
     public Boolean validateLogin(@RequestBody CredentialsDto credentialsDto){
         logger.info("user wants to log in" + credentialsDto.toString());
-        return false; //default test value because db is not properly connected yet
+        CredentialsDto backendCredentialsObject = credentialService.findByUsername(credentialsDto.getUsername());
+        if (backendCredentialsObject == null) return false; //if user isnt found, return false
+        return backendCredentialsObject.getPassword().equals(credentialsDto.getPassword());
     }
 }

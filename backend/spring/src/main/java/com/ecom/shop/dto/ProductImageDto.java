@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductImageDto {
-    int productId;
     String imageUrl;
     String text;
     String sortOrder;
