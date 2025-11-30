@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { registerUser } from '../services/api';
 
 const InputField = ({ label, name, type = "text", placeholder, colSpan = "col-span-1", value, onChange }) => (
   <div className={colSpan}>
@@ -51,15 +52,16 @@ export default function Register() {
       return;
     }
 
-    setTimeout(() => {
-      if (formData.email === 'fehler@test.de') {
-        setError('Diese E-Mail-Adresse wird bereits verwendet.');
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
-        navigate('/'); 
-      }
-    }, 1500);
+    try {
+      await registerUser(formData);
+      
+      setIsLoading(false);
+      navigate('/');
+
+    } catch (err) {
+      setError(err.message || 'Ein unbekannter Fehler ist aufgetreten.');
+      setIsLoading(false);
+    }
   };
 
   return (
