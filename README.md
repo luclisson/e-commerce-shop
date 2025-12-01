@@ -39,12 +39,17 @@ We are currently in the **planning and architecture phase**. Detailed setup and 
 ## 🤝 Contributing
 
 - Emilio alias Cortado
-  - set up dbms running in docker
-  - learning and supporting with spring boot
+  - set up infrastructure
+    incl. servers, pipelines and docker workflow
 - Johan alias Filterkaffee
   - frontend dev
+    incl. react and tailwindcss
 - Max alias Lungo
   - dba
+    incl. developing database functions, views triggers
+    and maintaining the database
 - Luc alias Flat White
   - backend dev
+    incl. spring boot development to connect db and react
+    if possible implement cookies etc to learn
 ---
