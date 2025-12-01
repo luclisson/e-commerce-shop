@@ -15,34 +15,46 @@ const getHeaders = () => {
 };
 
 export const loginUser = async (username, password) => {
-  const credentials = btoa(`${username}:${password}`);
-  const authHeaderValue = `Basic ${credentials}`;
-
   try {
-    const response = await fetch(`${API_BASE_URL}/offer/getAvailableProducts`, { 
-      method: "GET",
+    const response = await fetch(`${API_BASE_URL}/shop/account/validateLogin`, { 
+      method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": authHeaderValue
-      }
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ 
+        username: username, 
+        password: password 
+      })
     });
 
     if (!response.ok) {
-      if (response.status === 401) throw new Error("Benutzername oder Passwort falsch.");
-      throw new Error("Login fehlgeschlagen.");
+      throw new Error("Serverfehler beim Login-Versuch.");
     }
 
-    localStorage.setItem("auth_header", authHeaderValue);
-    return true;
+    const isValid = await response.json(); 
+
+    if (isValid === true) {
+      const credentials = btoa(`${username}:${password}`);
+      const authHeaderValue = `Basic ${credentials}`;
+      
+      localStorage.setItem("auth_header", authHeaderValue);
+      localStorage.setItem("username", username);
+      
+      return true;
+    } else {
+      throw new Error("Benutzername oder Passwort falsch.");
+    }
 
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
-
 export const logoutUser = () => {
   localStorage.removeItem("auth_header");
+  
+  localStorage.removeItem("username"); 
+  
   window.location.href = "/";
 };
 

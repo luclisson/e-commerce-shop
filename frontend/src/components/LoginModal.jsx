@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { loginUser } from '../services/api';
 
 export default function LoginModal({ isOpen, onClose }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      await loginUser(username, password);
+      
+      setIsLoading(false);
+      onClose(); 
+      window.location.reload(); 
+      
+    } catch (err) {
+      setIsLoading(false);
+      setError(err.message); 
+    }
+  };
 
   return (
     <div 
@@ -24,13 +48,22 @@ export default function LoginModal({ isOpen, onClose }) {
           <p className="text-stone-500 text-sm mt-2">Logge dich ein, um Equipment zu verkaufen.</p>
         </div>
 
-        <form className="space-y-4">
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 text-sm rounded-lg text-center font-bold">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold text-stone-700 mb-1">E-Mail</label>
+            <label className="block text-sm font-bold text-stone-700 mb-1">Benutzername</label>
             <input 
-              type="email" 
+              type="text" 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full bg-white text-stone-900 border border-stone-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all"
-              placeholder="barista@beispiel.de"
+              placeholder="KaffeeMeister99"
+              required
             />
           </div>
           
@@ -38,15 +71,19 @@ export default function LoginModal({ isOpen, onClose }) {
             <label className="block text-sm font-bold text-stone-700 mb-1">Passwort</label>
             <input 
               type="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-white text-stone-900 border border-stone-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all"
               placeholder="••••••••"
+              required
             />
           </div>
 
           <button 
             type="submit"
-            className="w-full bg-stone-900 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-colors shadow-lg hover:shadow-orange-600/20">
-            Einloggen
+            disabled={isLoading}
+            className="w-full bg-stone-900 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-colors shadow-lg hover:shadow-orange-600/20 disabled:opacity-50 disabled:cursor-not-allowed">
+            {isLoading ? 'Lade...' : 'Einloggen'}
           </button>
         </form>
 
