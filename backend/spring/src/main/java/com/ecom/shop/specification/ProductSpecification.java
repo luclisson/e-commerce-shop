@@ -3,21 +3,33 @@ package com.ecom.shop.specification;
 import com.ecom.shop.dto.ProductFilterDto;
 import com.ecom.shop.entity.Category;
 import com.ecom.shop.entity.Product;
+import com.ecom.shop.repository.CategoryRepo;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class ProductSpecification {
-    public static Specification<Product> filterProducts(ProductFilterDto filter){
+    private final CategoryRepo categoryRepo;
+
+    public Specification<Product> filterProducts(ProductFilterDto filter){
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if(filter.getCategory() != null && !filter.getCategory().isEmpty()){
-                Join<Product, Category> categoryJoin = root.join("category", JoinType.INNER);
-                predicates.add(criteriaBuilder.equal(categoryJoin.get("name"),filter.getCategory()));
+                List<Integer> categoryIds = categoryRepo.getCategoryIdsIncludingSubcategories(filter.getCategory());
+                if (categoryIds == null || categoryIds.isEmpty()) {
+                    return criteriaBuilder.disjunction(); // No matches
+                }
+                if (!categoryIds.isEmpty()) {
+                    predicates.add(root.get("category").get("id").in(categoryIds));
+                }
             }
             if(filter.getMinPrice() != null){
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"),filter.getMinPrice()));
@@ -27,7 +39,7 @@ public class ProductSpecification {
             }
 
 
-            return criteriaBuilder.and(predicates.toArray(predicates.toArray(new Predicate[0])));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }
 }

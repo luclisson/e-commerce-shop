@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepo productRepo;
     private final ProductMapperService productMapperService;
+    private final ProductSpecification productSpecification;
 
     public List<ProductDto> getAllAvailableOffers(){
         return productRepo.getAllAvailableProducts()
@@ -29,7 +30,7 @@ public class ProductService {
     }
 
     public List<ProductDto> getProductsByFilter(ProductFilterDto filter){
-        return productRepo.findAll(ProductSpecification.filterProducts(filter))
+        return productRepo.findAll(productSpecification.filterProducts(filter))
                 .stream().map(productMapperService::toProductDto)
                 .collect(Collectors.toList());
     }
