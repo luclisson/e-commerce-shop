@@ -1,17 +1,15 @@
 export default function ProductCard({ title, price, category, imageUrl }) {
-  // Eine Platzhalter-URL, falls gar kein Bild da ist oder der Link kaputt ist
   const fallbackImage = "https://placehold.co/600x600?text=Kein+Bild";
 
   return (
     <div className="bg-white border border-stone-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group">
       <div className="aspect-square bg-stone-100 relative overflow-hidden">
          <img 
-            src={imageUrl || fallbackImage} // Wenn imageUrl leer ist, nimm direkt den Platzhalter
+            src={imageUrl || fallbackImage}
             alt={title} 
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            // Das hier ist neu: Wenn das Bild nicht geladen werden kann (404), tausche es aus
             onError={(e) => {
-              e.target.onerror = null; // Verhindert Endlosschleife
+              e.target.onerror = null;
               e.target.src = fallbackImage;
             }}
          />

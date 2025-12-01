@@ -19,7 +19,6 @@ export const loginUser = async (username, password) => {
   const authHeaderValue = `Basic ${credentials}`;
 
   try {
-    // Hier nutzen wir den korrekten Endpunkt zum Testen des Logins
     const response = await fetch(`${API_BASE_URL}/offer/getAvailableProducts`, { 
       method: "GET",
       headers: {
@@ -76,11 +75,8 @@ export const registerUser = async (userData) => {
   return text ? (text.startsWith('{') ? JSON.parse(text) : { success: true }) : { success: true };
 };
 
-// --- HIER WAR DER FEHLER ---
 export const fetchProducts = async () => {
-  // ALT (FALSCH): const response = await fetch(`${API_BASE_URL}/shop/products`, ...
-  
-  // NEU (RICHTIG): Muss exakt so heißen wie im ProductController!
+
   const response = await fetch(`${API_BASE_URL}/shop/offer/getAvailableProducts`, {
     method: "GET",
     headers: getHeaders()
