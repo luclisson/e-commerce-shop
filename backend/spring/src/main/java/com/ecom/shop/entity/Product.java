@@ -13,10 +13,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int productId;
-    /*
-    @Column(name = "category_id")
-    private int categoryId;
-     */
 
     @Column(name = "account_id")
     private int accountId;

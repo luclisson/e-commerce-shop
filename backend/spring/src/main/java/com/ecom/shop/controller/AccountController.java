@@ -1,8 +1,9 @@
 package com.ecom.shop.controller;
 
 import com.ecom.shop.dto.AccountCreationDto;
+import com.ecom.shop.dto.AccountDto;
+import com.ecom.shop.dto.AccountPageDto;
 import com.ecom.shop.dto.CredentialsDto;
-import com.ecom.shop.entity.Account;
 import com.ecom.shop.service.AccountService;
 import com.ecom.shop.service.CredentialService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class AccountController {
     private final CredentialService credentialService;
 
     @GetMapping("/getAccountById/{id}")
-    public Optional<Account> getAccountById(@PathVariable int id){
+    public Optional<AccountDto> getAccountById(@PathVariable int id){
         return accountService.getAccountById(id);
     }
 
@@ -50,5 +51,9 @@ public class AccountController {
         CredentialsDto backendCredentialsObject = credentialService.findByUsername(credentialsDto.getUsername());
         if (backendCredentialsObject == null) return false; //if user isnt found, return false
         return backendCredentialsObject.getPassword().equals(credentialsDto.getPassword());
+    }
+    @GetMapping("/getAccountPageData/{username}")
+    public AccountPageDto getAccountPageData(@PathVariable String username){
+        return accountService.getAccountPageData(username);
     }
 }

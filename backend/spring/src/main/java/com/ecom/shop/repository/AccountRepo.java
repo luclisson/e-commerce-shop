@@ -1,5 +1,6 @@
 package com.ecom.shop.repository;
 
+import com.ecom.shop.dto.AccountPageDto;
 import com.ecom.shop.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -7,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.util.Optional;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account,Integer> {
@@ -25,5 +27,8 @@ public interface AccountRepo extends JpaRepository<Account,Integer> {
             @Param("password") String password,
             @Param("isGuest") Boolean isGuest
     );
+
+    @Query(value = "select a from Account a join Credentials c on a.accountId=c.accountId where c.username = :username")
+    Account findByUsername(@Param("username") String username);
 }
 

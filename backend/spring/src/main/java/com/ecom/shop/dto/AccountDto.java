@@ -12,6 +12,7 @@ import java.util.Date;
 public class AccountDto {
     String firstName;
     String lastName;
+    AddressDto addressDto;
     String email;
     Date birthday;
     String gender;

@@ -17,8 +17,9 @@ public class Account {
     @GeneratedValue (strategy = GenerationType.AUTO)
     private int accountId;
 
-    @Column(name="address_id")
-    private String addressId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    Address address;
 
     @Column(name = "last_name")
     private String lastName;
