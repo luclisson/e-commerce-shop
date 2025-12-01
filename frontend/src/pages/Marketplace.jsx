@@ -14,7 +14,7 @@ export default function Marketplace() {
     });
   }, []);
 
-  return (
+ return (
     <div className="w-full px-6 md:px-10 py-10">
       <h1 className="text-3xl font-bold mb-8">Aktuelle Angebote</h1>
       
@@ -24,7 +24,17 @@ export default function Marketplace() {
             Array.from({ length: 10 }).map((_, i) => <ProductSkeleton key={i} />)
         ) : (
             products.map((p) => (
-                <ProductCard key={p.id} {...p} />
+                <ProductCard 
+                    key={p.id || p.title} 
+                    
+                    title={p.title}
+                    
+                    price={(p.price / 100).toFixed(2)}
+                    
+                    category={p.condition} 
+                    
+                    imageUrl={p.images && p.images.length > 0 ? p.images[0].imageUrl : null}
+                />
             ))
         )}
 

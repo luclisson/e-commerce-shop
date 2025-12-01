@@ -1,8 +1,18 @@
 export default function ProductCard({ title, price, category, imageUrl }) {
+  const fallbackImage = "https://placehold.co/600x600?text=Kein+Bild";
+
   return (
     <div className="bg-white border border-stone-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group">
       <div className="aspect-square bg-stone-100 relative overflow-hidden">
-         <img src={imageUrl} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+         <img 
+            src={imageUrl || fallbackImage}
+            alt={title} 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = fallbackImage;
+            }}
+         />
          <span className="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-bold text-stone-800">
            {category}
          </span>

@@ -14,13 +14,12 @@ const getHeaders = () => {
   return headers;
 };
 
-
 export const loginUser = async (username, password) => {
   const credentials = btoa(`${username}:${password}`);
   const authHeaderValue = `Basic ${credentials}`;
 
   try {
-    const response = await fetch(`${API_BASE_URL}/shop/products`, { 
+    const response = await fetch(`${API_BASE_URL}/offer/getAvailableProducts`, { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -73,11 +72,12 @@ export const registerUser = async (userData) => {
   }
 
   const text = await response.text();
-  return text ? JSON.parse(text) : { success: true };
+  return text ? (text.startsWith('{') ? JSON.parse(text) : { success: true }) : { success: true };
 };
 
 export const fetchProducts = async () => {
-  const response = await fetch(`${API_BASE_URL}/shop/products`, {
+
+  const response = await fetch(`${API_BASE_URL}/shop/offer/getAvailableProducts`, {
     method: "GET",
     headers: getHeaders()
   });
