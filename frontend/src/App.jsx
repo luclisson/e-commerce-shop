@@ -1,9 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Marketplace from './pages/Marketplace';
 import Register from './pages/Register';
+import AccountPage from './pages/AccountPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/account" element={<AccountPage />} />
         </Routes>
       </main>
 
