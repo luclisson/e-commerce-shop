@@ -60,9 +60,4 @@ public class AccountController {
         return accountService.getAccountPageData(username);
     }
 
-    private final WatchlistRepo watchlistRepo;
-    @GetMapping("getAccountWatchlist/{username}")
-    public List<Watchlist> getAccountWatchlist(@PathVariable String username){
-        return watchlistRepo.getWatchlistByUsername(username);
-    }
 }
