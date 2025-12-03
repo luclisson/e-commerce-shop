@@ -59,10 +59,8 @@ public class AccountController {
     public AccountPageDto getAccountPageData(@PathVariable String username){
         return accountService.getAccountPageData(username);
     }
+    /*
+    @PostMapping("/updateUserData/{username}")
 
-    private final WatchlistRepo watchlistRepo;
-    @GetMapping("getAccountWatchlist/{username}")
-    public List<Watchlist> getAccountWatchlist(@PathVariable String username){
-        return watchlistRepo.getWatchlistByUsername(username);
-    }
+     */
 }

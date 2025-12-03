@@ -16,4 +16,8 @@ public class CredentialService {
         Credentials creds = credentialRepo.findByUsername(username);
         return credentialsMapperService.toCredentialsDto(creds);
     }
+
+    public String findUsernameByAccountId(int id){
+        return credentialRepo.findUsernameByAccountId(id);
+    }
 }

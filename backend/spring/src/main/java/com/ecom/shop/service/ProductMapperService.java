@@ -15,6 +15,7 @@ public class ProductMapperService {
     public ProductDto toProductDto(Product p) {
         if (p == null) return null;
         return new ProductDto(
+                p.getProductId(),
                 p.getDescription(),
                 p.getPrice(),
                 p.getAmount(),

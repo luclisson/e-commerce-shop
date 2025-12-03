@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDto {
+    int productId;
     String description;
     int price;
     int amount;

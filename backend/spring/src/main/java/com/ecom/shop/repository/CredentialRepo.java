@@ -12,4 +12,7 @@ import java.util.Optional;
 public interface CredentialRepo extends JpaRepository<Credentials,Integer> {
     @Query(value = "Select c from Credentials c where c.username = :username",nativeQuery = false)
     public Credentials findByUsername(@Param("username") String username);
+
+    @Query(value = "Select c.username from Credentials c where c.accountId = :accountId")
+    public String findUsernameByAccountId(@Param("accountId")int accountId);
 }
