@@ -55,7 +55,7 @@ export default function Navbar() {
                   <span className="font-bold text-stone-800 text-sm hidden sm:block">{username}</span>
                   <span className="text-stone-500 text-xs">▼</span>
                 </button>
-
+                
                 {isMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-stone-100 overflow-hidden py-1 animate-in fade-in zoom-in duration-200">
                     <div className="px-4 py-3 border-b border-stone-100 bg-stone-50">

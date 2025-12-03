@@ -110,6 +110,19 @@ export const fetchProducts = async () => {
   return await response.json();
 };
 
+export const fetchProductById = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/shop/offer/getProductById/${id}`, {
+    method: "GET",
+    headers: getHeaders()
+  });
+
+  if (!response.ok) {
+    throw new Error("Produkt konnte nicht geladen werden.");
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
+};
 
 export const fetchAccountPageData = async (username) => {
   if (!username) {
@@ -123,6 +136,19 @@ export const fetchAccountPageData = async (username) => {
 
   if (!response.ok) {
     throw new Error("Konnte Account-Daten nicht laden.");
+  }
+
+  return await response.json();
+};
+
+export const fetchWatchlist = async (username) => {
+  const response = await fetch(`${API_BASE_URL}/shop/watchlist/getWatchlist/${username}`, {
+    method: "GET",
+    headers: getHeaders()
+  });
+
+  if (!response.ok) {
+    throw new Error("Konnte Watchlist nicht laden.");
   }
 
   return await response.json();
