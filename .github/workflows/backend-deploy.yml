@@ -34,8 +34,11 @@ jobs:
         working-directory: ./deployment/docker/backend
 
       - name: Push Docker Image
-        run: docker push ghcr.io/${{ github.repository }}/backend:latest
-
+        run: |
+          docker build \
+            -f deployment/docker/backend/Dockerfile \
+            -t ghcr.io/${{ github.repository }}/backend:latest \
+            .
       - name: Deploy on Server via SSH
         uses: appleboy/ssh-action@v1.1.0
         with:
