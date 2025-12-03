@@ -28,13 +28,13 @@ export default function Navbar() {
       <nav className="bg-white border-b border-stone-200 sticky top-0 z-40 w-full">
         <div className="w-full px-6 md:px-10 h-16 flex items-center justify-between">
           
-          <Link to="/" className="text-xl font-black text-stone-900 flex items-center gap-2">
+          <Link to="/" className="text-xl font-black text-orange-700 hover:text-orange-600 flex items-center gap-2">
              <span className="text-2xl">☕</span> Nicht Die Bohne
           </Link>
 
-          <div className="hidden md:flex gap-6">
-             <Link to="/" className="hover:text-orange-600 font-medium">Startseite</Link>
-             <Link to="/marketplace" className="hover:text-orange-600 font-medium">Marktplatz</Link>
+          <div className="hidden md:flex gap-7">
+             <Link to="/" className="text-lg hover:text-orange-600 text-orange-700 font-medium">Startseite</Link>
+             <Link to="/marketplace" className="text-lg hover:text-orange-600 text-orange-700 font-medium">Marktplatz</Link>
           </div>
 
           <div className="flex gap-4 items-center">
@@ -73,7 +73,7 @@ export default function Navbar() {
                     
                     <button 
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium"
+                      className="w-full text-left px-4 py-2 bg-orange-600 text-white hover:bg-orange-50 hover:text-orange-700  font-medium"
                     >
                       Abmelden
                     </button>
@@ -83,7 +83,7 @@ export default function Navbar() {
             ) : (
               <button 
                   onClick={() => setIsLoginOpen(true)}
-                  className="bg-stone-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-600 transition-colors">
+                  className="bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-700 transition-colors">
                   Login
               </button>
             )}
