@@ -215,7 +215,7 @@ export default function AccountPage() {
                         </button>
                         <button 
                             type="submit" 
-                            className="flex-1 bg-stone-900 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-colors shadow-lg"
+                            className="flex-1 bg-orange-600 text-white hover:bg-orange-50 hover:text-orange-700 font-bold py-3 rounded-xl transition-colors shadow-lg"
                         >
                             Speichern
                         </button>
