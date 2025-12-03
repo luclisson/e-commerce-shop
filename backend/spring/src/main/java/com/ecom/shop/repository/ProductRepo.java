@@ -28,4 +28,8 @@ public interface ProductRepo extends JpaRepository<Product, Integer>, JpaSpecifi
             "and c.username = :username")
     List<Product> getAllByUsername(@Param("username")String username);
 
+
+    @Query(value = "select p from ProductOffer po join Product p on p.productId = po.productId where po.offerId= :offerId")
+    List<Product> getProductByOfferId(@Param("offerId") int OfferId);
+
 }

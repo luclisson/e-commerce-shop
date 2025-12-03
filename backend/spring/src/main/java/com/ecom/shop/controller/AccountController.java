@@ -4,6 +4,8 @@ import com.ecom.shop.dto.AccountCreationDto;
 import com.ecom.shop.dto.AccountDto;
 import com.ecom.shop.dto.AccountPageDto;
 import com.ecom.shop.dto.CredentialsDto;
+import com.ecom.shop.entity.Watchlist;
+import com.ecom.shop.repository.WatchlistRepo;
 import com.ecom.shop.service.AccountService;
 import com.ecom.shop.service.CredentialService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.aspectj.apache.bcel.classfile.JavaClass;
 import org.jboss.logging.Logger;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.sql.Date;
 
@@ -55,5 +58,11 @@ public class AccountController {
     @GetMapping("/getAccountPageData/{username}")
     public AccountPageDto getAccountPageData(@PathVariable String username){
         return accountService.getAccountPageData(username);
+    }
+
+    private final WatchlistRepo watchlistRepo;
+    @GetMapping("getAccountWatchlist/{username}")
+    public List<Watchlist> getAccountWatchlist(@PathVariable String username){
+        return watchlistRepo.getWatchlistByUsername(username);
     }
 }

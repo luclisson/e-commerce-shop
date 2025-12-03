@@ -3,6 +3,8 @@ package com.ecom.shop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,8 +16,9 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int offerId;
 
-    @Column(name = "product_id") //brauchen wir hier nicht eigentlich die product_offer id?
-    private int productId;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private List<Product> product;
 
     @Column(name = "account_seller_id")
     private int accountId;

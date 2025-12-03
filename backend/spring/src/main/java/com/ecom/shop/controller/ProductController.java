@@ -2,7 +2,9 @@ package com.ecom.shop.controller;
 
 import com.ecom.shop.dto.ProductDto;
 import com.ecom.shop.dto.ProductFilterDto;
+import com.ecom.shop.dto.WatchlistDto;
 import com.ecom.shop.service.ProductService;
+import com.ecom.shop.service.WatchlistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
