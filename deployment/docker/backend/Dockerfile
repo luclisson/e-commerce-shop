@@ -10,7 +10,7 @@ USER appuser
 # JAR kopieren
 COPY ../../../backend/spring/target/*.jar app.jar
 
-# Optionale Runtime-Parameter (vgl. Artikel)
+# Optionale Runtime-Parameter
 ENV JVM_XMS=256m \
     JVM_XMX=512m \
     SPRING_PROFILES_ACTIVE=prod
