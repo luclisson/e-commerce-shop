@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-// Echte Imports
 import { fetchAccountPageData, fetchWatchlist, updateAccountData } from '../services/api';
 import ProductCard from '../components/ProductCard';
 
 export default function AccountPage() {
-  // --- STATE ---
   const [userData, setUserData] = useState({
     username: '', 
     firstname: '',
@@ -30,7 +28,6 @@ export default function AccountPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [saveError, setSaveError] = useState(null);
 
-  // --- DATA LOADING ---
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -83,7 +80,6 @@ export default function AccountPage() {
     loadData();
   }, []);
 
-  // --- HANDLERS ---
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
@@ -116,10 +112,8 @@ export default function AccountPage() {
 
         const result = await updateAccountData(accountDto);
 
-        // API gibt 0 zurück bei Erfolg
         if (result === 0) {
-            // KEIN ALERT MEHR
-            setIsEditing(false); // Beendet den Bearbeitungsmodus sofort
+            setIsEditing(false);
         } else {
             setSaveError("Das Backend hat einen Fehler gemeldet (Code 1). Bitte Eingaben prüfen.");
         }
@@ -130,7 +124,6 @@ export default function AccountPage() {
     }
   };
 
-  // --- RENDERING ---
 
   if (isLoading) {
     return (
@@ -169,7 +162,6 @@ export default function AccountPage() {
         </div>
       </div>
 
-      {/* --- TABS NAVIGATION --- */}
       <div className="flex flex-wrap gap-3 mb-10">
         <button 
             onClick={() => setActiveTab('profile')}
@@ -214,11 +206,9 @@ export default function AccountPage() {
       </div>
 
 
-      {/* --- CONTENT: PROFIL --- */}
       {activeTab === 'profile' && (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 animate-in fade-in zoom-in-95 duration-300">
         
-        {/* LINKER BEREICH: AVATAR */}
         <div className="md:col-span-1">
             <div className="bg-white p-8 rounded-2xl border border-stone-200 text-center shadow-sm space-y-4">
                 <div className="w-24 h-24 bg-stone-900 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-2">
@@ -253,7 +243,6 @@ export default function AccountPage() {
             </div>
         </div>
 
-        {/* RECHTER BEREICH: FORMULAR */}
         <div className="md:col-span-2">
             <form onSubmit={handleSave} className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-6">
                 
@@ -396,7 +385,6 @@ export default function AccountPage() {
       </div>
       )}
 
-      {/* --- CONTENT: ANGEBOTE --- */}
       {activeTab === 'offers' && (
       <div className="mt-4 animate-in fade-in zoom-in-95 duration-300">
         <h2 className="text-2xl font-black text-stone-900 mb-6">
@@ -428,7 +416,6 @@ export default function AccountPage() {
       </div>
       )}
 
-      {/* --- CONTENT: WATCHLIST --- */}
       {activeTab === 'watchlist' && (
       <div className="mt-4 animate-in fade-in zoom-in-95 duration-300">
         <h2 className="text-2xl font-black text-stone-900 mb-6">

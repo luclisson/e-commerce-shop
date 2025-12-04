@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchWatchlist } from '../services/api';
-import ProductCard from '../components/ProductCard'; // Nutzt jetzt deine neue Link-Logik
+import ProductCard from '../components/ProductCard';
 
 export default function Watchlist() {
   const [watchlistItems, setWatchlistItems] = useState([]);
@@ -19,7 +19,6 @@ export default function Watchlist() {
         }
 
         const data = await fetchWatchlist(username);
-        // Falls data.watchedProducts null ist, leeres Array nutzen
         setWatchlistItems(data.watchedProducts || []);
       } catch (err) {
         console.error("Fehler beim Laden der Watchlist:", err);
@@ -73,37 +72,31 @@ export default function Watchlist() {
       ) : watchlistItems.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {watchlistItems.map((item) => {
-            // --- DATEN-MAPPING ---
-            
-            // 1. Preis formatieren (nur die Zahl, da ProductCard das "€" hinzufügt)
+
             const priceValue = item.price 
-                ? (item.price / 100).toFixed(2) // Ergebnis: "850.00"
+                ? (item.price / 100).toFixed(2)
                 : '0.00';
             
-            // 2. Bild URL holen
             const imageUrl = item.images && item.images.length > 0 
                 ? item.images[0].imageUrl 
                 : null;
 
             return (
                 <div key={item.productId} className="relative group h-full">
-                    {/* Der ProductCard ist jetzt selbst ein Link */}
                     <ProductCard 
-                        id={item.productId}      // WICHTIG für den Link (/product/3)
+                        id={item.productId} 
                         title={item.title}
-                        price={priceValue}       // Übergibt nur "850.00"
+                        price={priceValue}      
                         category={item.condition}
                         imageUrl={imageUrl}
                     />
                     
-                    {/* Entfernen Button (liegt über dem Link) */}
-                    {/* pointer-events-auto stellt sicher, dass man den Button klicken kann */}
                     <button 
                         className="absolute top-2 right-2 bg-white text-stone-400 hover:text-red-600 w-8 h-8 flex items-center justify-center rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-10"
                         title="Von Merkliste entfernen"
                         onClick={(e) => {
-                            e.preventDefault(); // Verhindert Link-Navigation
-                            e.stopPropagation(); // Verhindert Bubbling
+                            e.preventDefault();
+                            e.stopPropagation();
                             alert(`Produkt ID ${item.productId} entfernen - Logik hier einfügen.`);
                         }}
                     >

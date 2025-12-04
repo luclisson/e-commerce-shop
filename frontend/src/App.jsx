@@ -6,7 +6,7 @@ import Marketplace from './pages/Marketplace';
 import Register from './pages/Register';
 import AccountPage from './pages/AccountPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
-import Watchlist from './pages/Watchlist'; // Import der neuen Seite
+import Watchlist from './pages/Watchlist';
 
 function App() {
   return (
