@@ -1,9 +1,9 @@
 package com.ecom.shop.service;
 
-import com.ecom.shop.dto.ProductDto;
+import com.ecom.shop.dto.ProductSecHandDto;
 import com.ecom.shop.dto.WatchlistDto;
 import com.ecom.shop.entity.Watchlist;
-import com.ecom.shop.repository.ProductRepo;
+import com.ecom.shop.repository.ProductSecHandRepo;
 import com.ecom.shop.repository.WatchlistRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,18 +18,13 @@ public class WatchlistMapperService {
     private final WatchlistRepo watchlistRepo;
 
     //return ProductDto list
-    private final ProductRepo productRepo;
-    private final ProductMapperService productMapperService;
+    private final ProductSecHandRepo productSecHandRepo;
+    private final ProductSecHandMapperService productSecHandMapperService;
     public WatchlistDto toWatchListDto(List<Watchlist> watchlist) {
-        List<ProductDto> resultList = new ArrayList<>();
-        for(Watchlist element: watchlist){
-           List<ProductDto> productsFromOfferMarked =  productRepo.getProductByOfferId(element.getOfferId())
-                   .stream().map(productMapperService::toProductDto).collect(Collectors.toList());
-           resultList.addAll(productsFromOfferMarked);
-        }
-
         return new WatchlistDto(
-                resultList
+                watchlist.stream().map(Watchlist::getProduct)
+                        .map(productSecHandMapperService::toProductSecHandDto)
+                        .collect(Collectors.toList())
         );
     }
 

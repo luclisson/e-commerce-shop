@@ -21,6 +21,7 @@ public class Watchlist {
     @Column(name = "account_id")
     private int accountId;
 
-    @Column(name = "offer_id")
-    private int offerId;
+    @OneToOne
+    @JoinColumn(name = "product_secondhand_id")
+    private ProductSecondHand product;
 }

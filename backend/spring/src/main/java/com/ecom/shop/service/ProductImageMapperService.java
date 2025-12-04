@@ -1,4 +1,3 @@
-// ...existing code...
 package com.ecom.shop.service;
 
 import com.ecom.shop.dto.ProductImageDto;
@@ -18,4 +17,3 @@ public class ProductImageMapperService {
         );
     }
 }
-

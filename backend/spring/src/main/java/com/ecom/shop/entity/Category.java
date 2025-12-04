@@ -9,6 +9,7 @@ import lombok.*;
 @Data
 @Table
 public class Category {
+    // ist nicht 1:1 gemapped. ich habe die img url und parentId nicht gemapped
     @Column(name = "category_id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

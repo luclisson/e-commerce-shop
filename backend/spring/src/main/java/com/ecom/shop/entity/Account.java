@@ -36,6 +36,5 @@ public class Account {
     @Column(name = "is_guest")
     private Boolean isGuest;
 
-    //@Enumerated(EnumType.STRING)
     private Gender gender;
 }

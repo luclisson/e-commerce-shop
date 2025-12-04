@@ -1,5 +1,7 @@
 package com.ecom.shop.entity;
 
+import com.ecom.shop.type.Condition;
+import com.ecom.shop.type.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,15 +9,22 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table
-public class Product {
-    @Column(name = "product_id")
+@Table(name = "product_secondhand")
+public class ProductSecondHand {
+    @Column(name = "product_secondhand_id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int productId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Column(name = "account_id")
     private int accountId;
+
+    @Column
+    private String title;
 
     @Column
     private String description;
@@ -27,11 +36,8 @@ public class Product {
     private int amount;
 
     @Column
-    private String condition;
+    private Condition condition;
 
     @Column
-    private String title;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private Status status;
 }

@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class WatchlistDto {
-    List<ProductDto> watchedProducts;
+    List<ProductSecHandDto> watchedProducts;
 }

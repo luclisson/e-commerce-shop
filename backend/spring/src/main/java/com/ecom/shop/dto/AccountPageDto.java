@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class AccountPageDto {
     AccountDto accountData;
-    List<ProductDto> products;
+    List<ProductSecHandDto> products;
 }

@@ -1,11 +1,8 @@
 package com.ecom.shop.specification;
 
 import com.ecom.shop.dto.ProductFilterDto;
-import com.ecom.shop.entity.Category;
-import com.ecom.shop.entity.Product;
+import com.ecom.shop.entity.ProductSecondHand;
 import com.ecom.shop.repository.CategoryRepo;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,7 +16,7 @@ import java.util.List;
 public class ProductSpecification {
     private final CategoryRepo categoryRepo;
 
-    public Specification<Product> filterProducts(ProductFilterDto filter){
+    public Specification<ProductSecondHand> filterProducts(ProductFilterDto filter){
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if(filter.getCategory() != null && !filter.getCategory().isEmpty()){

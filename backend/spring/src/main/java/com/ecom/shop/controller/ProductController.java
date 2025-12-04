@@ -1,10 +1,8 @@
 package com.ecom.shop.controller;
 
-import com.ecom.shop.dto.ProductDto;
+import com.ecom.shop.dto.ProductSecHandDto;
 import com.ecom.shop.dto.ProductFilterDto;
-import com.ecom.shop.dto.WatchlistDto;
-import com.ecom.shop.service.ProductService;
-import com.ecom.shop.service.WatchlistService;
+import com.ecom.shop.service.ProductSecHandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,25 +13,25 @@ import java.util.Optional;
 @RequestMapping("/offer")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductService productService;
+    private final ProductSecHandService productSecHandService;
 
     @GetMapping("/getAvailableProducts")
-    public List<ProductDto> getAllProduct(){
-        return productService.getAllAvailableOffers();
+    public List<ProductSecHandDto> getAllProduct(){
+        return productSecHandService.getAllAvailableOffers();
     }
 
     @GetMapping("/getAvailableProducts/{username}")
-    public List<ProductDto>getAllProductByUsername(@PathVariable String username){
-        return productService.getAllAvailableOffersByUsername(username);
+    public List<ProductSecHandDto>getAllProductByUsername(@PathVariable String username){
+        return productSecHandService.getAllAvailableOffersByUsername(username);
     }
 
     @GetMapping("/getAvailableProductsByFilter")
-    public List<ProductDto> getProductsByFilter(@RequestBody ProductFilterDto filter){
-        return productService.getProductsByFilter(filter);
+    public List<ProductSecHandDto> getProductsByFilter(@RequestBody ProductFilterDto filter){
+        return productSecHandService.getProductsByFilter(filter);
     }
 
     @GetMapping("/getProductById/{id}")
-    public Optional<ProductDto> getProductById(@PathVariable int id){
-        return productService.getProductById(id);
+    public Optional<ProductSecHandDto> getProductById(@PathVariable int id){
+        return productSecHandService.getProductById(id);
     }
 }

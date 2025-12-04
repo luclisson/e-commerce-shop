@@ -3,26 +3,20 @@ package com.ecom.shop.service;
 import com.ecom.shop.dto.AccountDto;
 import com.ecom.shop.dto.AccountPageDto;
 import com.ecom.shop.entity.Account;
-import com.ecom.shop.entity.Address;
 import com.ecom.shop.repository.AccountRepo;
 import com.ecom.shop.repository.AddressRepo;
-import com.ecom.shop.type.Gender;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepo accountRepo;
     private final AccountMapperService accountMapperService;
-    private final ProductService productService;
-    private final AddressService addressService;
-    private final AddressRepo addressRepo;
+    private final ProductSecHandService productSecHandService;
 
     public Optional<AccountDto> getAccountById(Integer id){
         return accountRepo.findById(id)
@@ -47,7 +41,7 @@ public class AccountService {
     public AccountPageDto getAccountPageData(String username){
         return new AccountPageDto(
                 accountMapperService.toAccountDto(accountRepo.findByUsername(username)),
-                productService.getAllAvailableOffersByUsername(username)
+                productSecHandService.getAllAvailableOffersByUsername(username)
         );
     };
 
