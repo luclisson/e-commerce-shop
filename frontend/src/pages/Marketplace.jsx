@@ -76,7 +76,7 @@ export default function Marketplace() {
                         onClick={() => setSelectedGroup("Alle")}
                         className={`text-left px-4 py-2 rounded-lg text-sm font-medium transition-all flex justify-between items-center ${
                             selectedGroup === "Alle" 
-                            ? 'bg-stone-900 text-white shadow-md' 
+                            ? 'bg-orange-700 text-white shadow-md' 
                             : 'bg-stone-50 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
                         }`}
                     >
@@ -92,7 +92,7 @@ export default function Marketplace() {
                                 onClick={() => setSelectedGroup(groupName)}
                                 className={`text-left px-4 py-2 rounded-lg text-sm font-medium transition-all flex justify-between items-center ${
                                     selectedGroup === groupName 
-                                    ? 'bg-stone-900 text-white shadow-md' 
+                                    ? 'bg-orange-600 text-white shadow-md' 
                                     : 'bg-stone-50 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
                                 }`}
                             >
