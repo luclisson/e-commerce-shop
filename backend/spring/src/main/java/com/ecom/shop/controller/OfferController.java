@@ -17,7 +17,6 @@ public class OfferController {
 
     @PostMapping("/createOffer")
     public void createOffer(@RequestBody CreateOfferDto createOfferDto){
-
-
+        productSecHandService.createProduct(createOfferDto);
     }
 }

@@ -1,5 +1,6 @@
 package com.ecom.shop.controller;
 
+import com.ecom.shop.dto.CreateOfferDto;
 import com.ecom.shop.dto.ProductSecHandDto;
 import com.ecom.shop.dto.ProductFilterDto;
 import com.ecom.shop.service.ProductSecHandService;
@@ -34,4 +35,5 @@ public class ProductController {
     public Optional<ProductSecHandDto> getProductById(@PathVariable int id){
         return productSecHandService.getProductById(id);
     }
+
 }

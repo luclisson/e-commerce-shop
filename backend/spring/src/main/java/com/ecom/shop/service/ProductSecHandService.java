@@ -1,5 +1,7 @@
 package com.ecom.shop.service;
 
+import com.ecom.shop.dto.CreateOfferDto;
+import com.ecom.shop.dto.CreateOrderDto;
 import com.ecom.shop.dto.ProductSecHandDto;
 import com.ecom.shop.dto.ProductFilterDto;
 import com.ecom.shop.repository.ProductSecHandRepo;
@@ -40,7 +42,18 @@ public class ProductSecHandService {
         return productSecHandRepo.findById(id).map(productSecHandMapperService::toProductSecHandDto);
     }
 
-
+    public void createProduct(CreateOfferDto offer){
+        productSecHandRepo.createProduct(
+                offer.getCategoryId(),
+                offer.getSellerId(),
+                offer.getTitle(),
+                offer.getDescription(),
+                offer.getPrice(),
+                offer.getAmount(),
+                offer.getCondition(),
+                offer.getMainIndex()
+        );
+    }
 
 
 }
