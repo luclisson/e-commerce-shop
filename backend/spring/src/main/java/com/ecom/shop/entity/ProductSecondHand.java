@@ -20,7 +20,7 @@ public class ProductSecondHand {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name = "account_id")
+    @Column(name = "account_seller_id")
     private int accountId;
 
     @Column

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/offer")
+@RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductSecHandService productSecHandService;
