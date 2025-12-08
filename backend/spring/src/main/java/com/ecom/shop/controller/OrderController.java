@@ -1,11 +1,31 @@
 package com.ecom.shop.controller;
 
+import com.ecom.shop.dto.CreateOrderDto;
+import com.ecom.shop.dto.OrderDto;
+import com.ecom.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderController {
+    private final OrderService orderService;
+    /*
+    create order
+     */
+
+    @PostMapping("/createOrder")
+    public void createOrder(@RequestBody CreateOrderDto order) {
+        orderService.createOrderSecHand(
+                order.getBuyerUsername(),
+                order.getPaymentMethod(),
+                new Integer[]{order.getSecondhandProductId()}, //prototype only one item in an order
+                new int[]{order.getQuantity()}
+        );
+    }
+
+    /*
+    cancel order by id
+     */
 }
