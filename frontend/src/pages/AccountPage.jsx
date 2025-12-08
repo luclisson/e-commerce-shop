@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { fetchAccountPageData, fetchWatchlist, updateAccountData } from '../services/api';
+import { 
+    fetchAccountPageData, 
+    fetchWatchlist, 
+    updateAccountData, 
+    removeFromWatchlist 
+} from '../services/api';
 import ProductCard from '../components/ProductCard';
 
 export default function AccountPage() {
@@ -27,6 +32,11 @@ export default function AccountPage() {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [saveError, setSaveError] = useState(null);
+
+  const conditionMapping = {
+    NEW: "Neu", LIKE_NEW: "Wie neu", EXCELLENT: "Exzellent",
+    MAX_GOOD: "Sehr gut", GOOD: "Gut", USED: "Gebraucht", DEFECT: "Defekt"
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -79,6 +89,22 @@ export default function AccountPage() {
 
     loadData();
   }, []);
+
+  const handleRemoveFromWatchlist = async (productId) => {
+    const username = localStorage.getItem("username");
+    if (!username) return;
+
+    const previousWatchlist = [...myWatchlist];
+    setMyWatchlist(prev => prev.filter(item => item.productId !== productId));
+
+    try {
+        await removeFromWatchlist(username, productId);
+    } catch (err) {
+        console.error("Fehler beim Entfernen:", err);
+        setMyWatchlist(previousWatchlist);
+        alert("Konnte Eintrag nicht entfernen.");
+    }
+  };
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -153,7 +179,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 font-sans text-stone-800 min-h-[80vh]">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 font-sans text-stone-800 min-h-[80vh]">
       
       <div className="flex justify-between items-end mb-8">
         <div>
@@ -245,62 +271,28 @@ export default function AccountPage() {
 
         <div className="md:col-span-2">
             <form onSubmit={handleSave} className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-6">
-                
-                <h3 className="font-bold text-lg border-b border-stone-100 pb-2 mb-4 text-stone-800">Persönliche Daten</h3>
 
-                {saveError && (
-                    <div className="bg-red-50 text-red-700 border border-red-200 p-3 rounded-lg text-sm mb-4">
-                        {saveError}
-                    </div>
-                )}
+                <h3 className="font-bold text-lg border-b border-stone-100 pb-2 mb-4 text-stone-800">Persönliche Daten</h3>
+                {saveError && <div className="bg-red-50 text-red-700 border border-red-200 p-3 rounded-lg text-sm mb-4">{saveError}</div>}
                 
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-bold text-stone-700 mb-1">Vorname</label>
-                        <input 
-                            type="text" 
-                            name="firstname"
-                            value={userData.firstname}
-                            onChange={handleChange}
-                            disabled={!isEditing}
-                            className={`w-full border rounded-lg px-4 py-2 transition-all outline-none ${isEditing ? 'bg-white border-stone-300 focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 border-stone-200 text-stone-500 cursor-not-allowed'}`}
-                        />
+                        <input type="text" name="firstname" value={userData.firstname} onChange={handleChange} disabled={!isEditing} className={`w-full border rounded-lg px-4 py-2 outline-none ${isEditing ? 'bg-white focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 text-stone-500 cursor-not-allowed'}`} />
                     </div>
                     <div>
                         <label className="block text-sm font-bold text-stone-700 mb-1">Nachname</label>
-                        <input 
-                            type="text" 
-                            name="lastname"
-                            value={userData.lastname}
-                            onChange={handleChange}
-                            disabled={!isEditing}
-                            className={`w-full border rounded-lg px-4 py-2 transition-all outline-none ${isEditing ? 'bg-white border-stone-300 focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 border-stone-200 text-stone-500 cursor-not-allowed'}`}
-                        />
+                        <input type="text" name="lastname" value={userData.lastname} onChange={handleChange} disabled={!isEditing} className={`w-full border rounded-lg px-4 py-2 outline-none ${isEditing ? 'bg-white focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 text-stone-500 cursor-not-allowed'}`} />
                     </div>
                 </div>
-
                 <div>
                     <label className="block text-sm font-bold text-stone-700 mb-1">E-Mail</label>
-                    <input 
-                        type="email" 
-                        name="email"
-                        value={userData.email}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        className={`w-full border rounded-lg px-4 py-2 transition-all outline-none ${isEditing ? 'bg-white border-stone-300 focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 border-stone-200 text-stone-500 cursor-not-allowed'}`}
-                    />
+                    <input type="email" name="email" value={userData.email} onChange={handleChange} disabled={!isEditing} className={`w-full border rounded-lg px-4 py-2 outline-none ${isEditing ? 'bg-white focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 text-stone-500 cursor-not-allowed'}`} />
                 </div>
-
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-bold text-stone-700 mb-1">Geschlecht</label>
-                        <select
-                            name="gender"
-                            value={userData.gender}
-                            onChange={handleChange}
-                            disabled={!isEditing}
-                            className={`w-full border rounded-lg px-4 py-2 transition-all outline-none ${isEditing ? 'bg-white border-stone-300 focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 border-stone-200 text-stone-500 cursor-not-allowed'}`}
-                        >
+                        <select name="gender" value={userData.gender} onChange={handleChange} disabled={!isEditing} className={`w-full border rounded-lg px-4 py-2 outline-none ${isEditing ? 'bg-white focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 text-stone-500 cursor-not-allowed'}`}>
                             <option value="Female">Weiblich</option>
                             <option value="Male">Männlich</option>
                             <option value="Divers">Divers</option>
@@ -309,75 +301,29 @@ export default function AccountPage() {
                     </div>
                     <div>
                         <label className="block text-sm font-bold text-stone-700 mb-1">Geburtstag</label>
-                        <input 
-                            type="date" 
-                            name="birthday"
-                            value={userData.birthday}
-                            onChange={handleChange}
-                            disabled={!isEditing}
-                            className={`w-full border rounded-lg px-4 py-2 transition-all outline-none ${isEditing ? 'bg-white border-stone-300 focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 border-stone-200 text-stone-500 cursor-not-allowed'}`}
-                        />
+                        <input type="date" name="birthday" value={userData.birthday} onChange={handleChange} disabled={!isEditing} className={`w-full border rounded-lg px-4 py-2 outline-none ${isEditing ? 'bg-white focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 text-stone-500 cursor-not-allowed'}`} />
                     </div>
                 </div>
-
                 <h3 className="font-bold text-lg border-b border-stone-100 pb-2 mb-4 pt-4 text-stone-800">Anschrift</h3>
-
                 <div>
                     <label className="block text-sm font-bold text-stone-700 mb-1">Straße & Hausnummer</label>
-                    <input 
-                        type="text" 
-                        name="street"
-                        value={userData.street}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        placeholder={isEditing ? "Musterstraße 1" : ""}
-                        className={`w-full border rounded-lg px-4 py-2 transition-all outline-none ${isEditing ? 'bg-white border-stone-300 focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 border-stone-200 text-stone-500 cursor-not-allowed'}`}
-                    />
+                    <input type="text" name="street" value={userData.street} onChange={handleChange} disabled={!isEditing} className={`w-full border rounded-lg px-4 py-2 outline-none ${isEditing ? 'bg-white focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 text-stone-500 cursor-not-allowed'}`} />
                 </div>
-
                 <div className="grid grid-cols-3 gap-4">
                     <div className="col-span-1">
                         <label className="block text-sm font-bold text-stone-700 mb-1">PLZ</label>
-                        <input 
-                            type="text" 
-                            name="postcode"
-                            value={userData.postcode}
-                            onChange={handleChange}
-                            disabled={!isEditing}
-                            className={`w-full border rounded-lg px-4 py-2 transition-all outline-none ${isEditing ? 'bg-white border-stone-300 focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 border-stone-200 text-stone-500 cursor-not-allowed'}`}
-                        />
+                        <input type="text" name="postcode" value={userData.postcode} onChange={handleChange} disabled={!isEditing} className={`w-full border rounded-lg px-4 py-2 outline-none ${isEditing ? 'bg-white focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 text-stone-500 cursor-not-allowed'}`} />
                     </div>
                     <div className="col-span-2">
                         <label className="block text-sm font-bold text-stone-700 mb-1">Stadt (Provinz)</label>
-                        <input 
-                            type="text" 
-                            name="city"
-                            value={userData.city}
-                            onChange={handleChange}
-                            disabled={!isEditing}
-                            className={`w-full border rounded-lg px-4 py-2 transition-all outline-none ${isEditing ? 'bg-white border-stone-300 focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 border-stone-200 text-stone-500 cursor-not-allowed'}`}
-                        />
+                        <input type="text" name="city" value={userData.city} onChange={handleChange} disabled={!isEditing} className={`w-full border rounded-lg px-4 py-2 outline-none ${isEditing ? 'bg-white focus:ring-2 focus:ring-orange-500' : 'bg-stone-50 text-stone-500 cursor-not-allowed'}`} />
                     </div>
                 </div>
 
                 {isEditing && (
                     <div className="flex gap-4 pt-6 animate-in fade-in slide-in-from-top-2">
-                        <button 
-                            type="button"
-                            onClick={() => {
-                                setIsEditing(false);
-                                setSaveError(null);
-                            }}
-                            className="flex-1 bg-stone-100 text-stone-700 font-bold py-3 rounded-xl hover:bg-stone-200 transition-colors"
-                        >
-                            Abbrechen
-                        </button>
-                        <button 
-                            type="submit" 
-                            className="flex-1 bg-orange-600 text-white hover:bg-orange-50 hover:text-orange-700 font-bold py-3 rounded-xl transition-colors shadow-lg"
-                        >
-                            Speichern
-                        </button>
+                        <button type="button" onClick={() => { setIsEditing(false); setSaveError(null); }} className="flex-1 bg-stone-100 text-stone-700 font-bold py-3 rounded-xl hover:bg-stone-200 transition-colors">Abbrechen</button>
+                        <button type="submit" className="flex-1 bg-orange-600 text-white hover:bg-orange-50 hover:text-orange-700 font-bold py-3 rounded-xl transition-colors shadow-lg">Speichern</button>
                     </div>
                 )}
             </form>
@@ -393,17 +339,22 @@ export default function AccountPage() {
 
         {myOffers.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {myOffers.map((product) => (
-               <div key={product.offerId || product.id} className="h-full">
-                <ProductCard 
-                    id={product.offerId || product.id}
-                    title={product.title}
-                    price={(product.price / 100).toFixed(2)}
-                    category={product.condition}
-                    imageUrl={product.images && product.images.length > 0 ? product.images[0].imageUrl : null}
-                />
-              </div>
-            ))}
+            {myOffers.map((product) => {
+                const displayCondition = conditionMapping[product.condition] || product.condition;
+                const id = product.offerId || product.id;
+                
+                return (
+                    <div key={id} className="h-full">
+                        <ProductCard 
+                            id={id}
+                            title={product.title}
+                            price={(product.price / 100).toFixed(2)}
+                            category={displayCondition}
+                            imageUrl={product.images && product.images.length > 0 ? product.images[0].imageUrl : null}
+                        />
+                    </div>
+                );
+            })}
           </div>
         ) : (
           <div className="text-center py-16 bg-stone-50 rounded-2xl border border-stone-200 border-dashed">
@@ -429,33 +380,25 @@ export default function AccountPage() {
         )}
 
         {myWatchlist.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {myWatchlist.map((item) => {
                 const title = item.title || "Unbekanntes Produkt";
                 const price = item.price ? (item.price / 100).toFixed(2) : "0.00";
                 const imageUrl = item.images && item.images.length > 0 ? item.images[0].imageUrl : null;
+                const displayCondition = conditionMapping[item.condition] || item.condition;
 
                 return (
-                  <div key={item.productId || Math.random()} className="relative h-full group">
+                  <div key={item.productId || Math.random()} className="h-full">
                     <ProductCard 
                         id={item.productId}
                         title={title}
                         price={price}
-                        category={item.condition}
+                        category={displayCondition}
                         imageUrl={imageUrl}
+                        
+                        isLiked={true}
+                        onToggleLike={() => handleRemoveFromWatchlist(item.productId)}
                     />
-                    
-                    <button 
-                        className="absolute top-2 right-2 bg-white text-stone-400 hover:text-red-600 w-8 h-8 flex items-center justify-center rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                        title="Von Merkliste entfernen"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            alert(`Produkt ID ${item.productId} entfernen - Logik implementieren.`);
-                        }}
-                    >
-                        ✕
-                    </button>
                   </div>
                 );
             })}

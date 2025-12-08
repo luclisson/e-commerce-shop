@@ -1,34 +1,30 @@
-const API_BASE_URL = "/api";
+ const API_BASE_URL = "/api";
+
 
 const getHeaders = () => {
-  const headers = {
-    "Content-Type": "application/json",
-  };
-  
-  
-  return headers;
+
+const headers = {
+
+"Content-Type": "application/json",
+
 };
 
-// OGIN
+return headers;
+
+}; 
+
+// LOGIN
 export const loginUser = async (username, password) => {
   try {
     const response = await fetch(`${API_BASE_URL}/shop/account/validateLogin`, { 
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ 
-        username: username, 
-        password: password 
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
     });
 
-    if (!response.ok) {
-      throw new Error("Serverfehler beim Login-Versuch.");
-    }
+    if (!response.ok) throw new Error("Serverfehler beim Login-Versuch.");
 
     const data = await response.json(); 
-    
     const isLoginSuccessful = data === true || (data && typeof data === 'object');
 
     if (isLoginSuccessful) {
@@ -38,29 +34,23 @@ export const loginUser = async (username, password) => {
       localStorage.setItem("auth_header", authHeaderValue);
       localStorage.setItem("username", username);
       
-      if (data.userId) {
-        localStorage.setItem("userId", data.userId);
-      } else {
-        console.warn("Backend lieferte keine User-ID. Account-Page wird eingeschränkt sein.");
-      }
+      if (data.userId) localStorage.setItem("userId", data.userId);
       
       return true;
     } else {
       throw new Error("Benutzername oder Passwort falsch.");
     }
-
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-//  LOGOUT
+// LOGOUT
 export const logoutUser = () => {
   localStorage.removeItem("auth_header");
   localStorage.removeItem("username"); 
   localStorage.removeItem("userId"); 
-  
   window.location.href = "/";
 };
 
@@ -89,55 +79,39 @@ export const registerUser = async (userData) => {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(errorData.message || "Registrierung fehlgeschlagen.");
   }
-
   const text = await response.text();
   return text ? (text.startsWith('{') ? JSON.parse(text) : { success: true }) : { success: true };
 };
 
 export const fetchProducts = async () => {
-
-  const response = await fetch(`${API_BASE_URL}/shop/offer/getAvailableProducts`, {
+  const headers = { "Content-Type": "application/json" };
+  const response = await fetch(`${API_BASE_URL}/shop/product/getAvailableProducts`, { // Adjusted path based on earlier context, check your backend
     method: "GET",
-    headers: {
-        "Content-Type": "application/json"
-    }
+    headers: headers
   });
 
-  if (!response.ok) {
-    throw new Error("Konnte Produkte nicht laden.");
-  }
-
+  if (!response.ok) throw new Error("Konnte Produkte nicht laden.");
   return await response.json();
 };
 
 export const fetchProductById = async (id) => {
-  const response = await fetch(`${API_BASE_URL}/shop/offer/getProductById/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/shop/product/getProductById/${id}`, { // Adjusted path
     method: "GET",
     headers: getHeaders()
   });
 
-  if (!response.ok) {
-    throw new Error("Produkt konnte nicht geladen werden.");
-  }
-
+  if (!response.ok) throw new Error("Produkt konnte nicht geladen werden.");
   const text = await response.text();
   return text ? JSON.parse(text) : null;
 };
 
 export const fetchAccountPageData = async (username) => {
-  if (!username) {
-    throw new Error("Kein Benutzername vorhanden.");
-  }
-
+  if (!username) throw new Error("Kein Benutzername vorhanden.");
   const response = await fetch(`${API_BASE_URL}/shop/account/getAccountPageData/${username}`, {
     method: "GET",
     headers: getHeaders()
   });
-
-  if (!response.ok) {
-    throw new Error("Konnte Account-Daten nicht laden.");
-  }
-
+  if (!response.ok) throw new Error("Konnte Account-Daten nicht laden.");
   return await response.json();
 };
 
@@ -146,30 +120,76 @@ export const fetchWatchlist = async (username) => {
     method: "GET",
     headers: getHeaders()
   });
-
-  if (!response.ok) {
-    throw new Error("Konnte Watchlist nicht laden.");
-  }
-
+  if (!response.ok) throw new Error("Konnte Watchlist nicht laden.");
   return await response.json();
 };
 
-export const updateAccountData = async (accountDto) => {
-  const token = localStorage.getItem("token"); 
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` })
-  };
+export const addToWatchlist = async (username, productId) => {
+    const response = await fetch(`${API_BASE_URL}/shop/watchlist/add/${username}/${productId}`, {
+        method: "POST",
+        headers: getHeaders()
+    });
+    if (!response.ok) throw new Error("Fehler beim Hinzufügen zur Watchlist.");
+};
 
+export const removeFromWatchlist = async (username, productId) => {
+    const response = await fetch(`${API_BASE_URL}/shop/watchlist/remove/${username}/${productId}`, {
+        method: "POST",
+        headers: getHeaders()
+    });
+    if (!response.ok) throw new Error("Fehler beim Entfernen aus der Watchlist.");
+};
+
+export const updateAccountData = async (accountDto) => {
   const response = await fetch(`${API_BASE_URL}/shop/account/updateUserData`, {
     method: "POST",
-    headers: headers,
+    headers: getHeaders(),
     body: JSON.stringify(accountDto)
   });
-
-  if (!response.ok) {
-    throw new Error("Fehler beim Senden der Daten.");
-  }
-
+  if (!response.ok) throw new Error("Fehler beim Senden der Daten.");
   return await response.json(); 
+};
+
+export const buySecondHandProduct = async (productId, paymentMethod = "PAYPAL") => {
+    const username = localStorage.getItem("username");
+    if (!username) throw new Error("Nicht eingeloggt.");
+
+    const payload = {
+        buyerUsername: username,
+        paymentMethod: paymentMethod,
+        secondhandProductId: parseInt(productId),
+        ecommerceProductId: null,
+        quantity: 1
+    };
+
+    const response = await fetch(`${API_BASE_URL}/shop/order/createOrder/secondHand`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) throw new Error("Kauf fehlgeschlagen (Second Hand).");
+    return true;
+};
+
+export const buyEcomProduct = async (productId, quantity = 1, paymentMethod = "PAYPAL") => {
+    const username = localStorage.getItem("username");
+    if (!username) throw new Error("Nicht eingeloggt.");
+
+    const payload = {
+        buyerUsername: username,
+        paymentMethod: paymentMethod,
+        secondhandProductId: null,
+        ecommerceProductId: parseInt(productId),
+        quantity: quantity
+    };
+
+    const response = await fetch(`${API_BASE_URL}/order/createOrder/ecom`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) throw new Error("Kauf fehlgeschlagen (E-Commerce).");
+    return true;
 };

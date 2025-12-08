@@ -8,6 +8,7 @@ import AccountPage from './pages/AccountPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import Watchlist from './pages/Watchlist';
 import Ecommerce from './pages/Ecommerce';
+import BuyConfirmationModal from './components/BuyConfirmationModal';
 
 function App() {
   return (
