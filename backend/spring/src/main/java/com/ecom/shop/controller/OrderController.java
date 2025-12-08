@@ -15,7 +15,7 @@ public class OrderController {
     create order
      */
 
-    @PostMapping("/createOrder")
+    @PostMapping("/createOrder/secondHand")
     public void createOrder(@RequestBody CreateOrderDto order) {
         orderService.createOrderSecHand(
                 order.getBuyerUsername(),
