@@ -1,15 +1,3 @@
 spring:
-  application:
-    name: nicht-die-bohne
-  datasource:
-    url: jdbc:postgresql://localhost:8000/KeineBohne?currentSchema=nichtdiebohne
-    username: adminbohne
-    password: nichtdiebohne
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-server:
-  port: 8080
-  servlet:
-    context-path: /api/shop
+  profiles:
+    active: dev

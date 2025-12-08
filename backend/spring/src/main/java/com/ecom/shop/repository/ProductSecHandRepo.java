@@ -24,9 +24,6 @@ public interface ProductSecHandRepo extends JpaRepository<ProductSecondHand, Int
     List<ProductSecondHand> getAllByUsername(@Param("username")String username);
 
     /*
-    @Query(value = "select p from ProductOffer po join ProductSecondHand p on p.productId = po.productId where po.offerId= :offerId")
-    List<ProductSecondHand> getProductByOfferId(@Param("offerId") int OfferId);
-
+    @Query("select ")
      */
-
 }
