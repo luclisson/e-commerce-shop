@@ -1,6 +1,7 @@
 package com.ecom.shop.controller;
 
 import com.ecom.shop.dto.CreateOrderDto;
+import com.ecom.shop.dto.FilterOrderDto;
 import com.ecom.shop.dto.OrderDto;
 import com.ecom.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class OrderController {
                 new Integer[]{order.getEcommerceProductId()}, //prototype only one item in an order
                 new int[]{order.getQuantity()}
         );
+    }
+
+    @PostMapping("/cancelOrder")
+    public void cancelOrder(@RequestBody FilterOrderDto order) {
+        orderService.cancelOrderByFilter(order);
     }
 
 
