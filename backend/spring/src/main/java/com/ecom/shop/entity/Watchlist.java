@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -14,12 +15,13 @@ import java.util.List;
 @Table(name= "watchlist")
 public class Watchlist {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="watchlist_id")
     private int watchlistId;
 
     @Column(name = "account_id")
     private int accountId;
+
 
     @OneToOne
     @JoinColumn(name = "product_secondhand_id")
