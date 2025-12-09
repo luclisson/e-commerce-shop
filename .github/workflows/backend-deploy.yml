@@ -34,7 +34,7 @@ jobs:
           docker build \
             -f deployment/docker/backend/Dockerfile \
             -t ghcr.io/${{ github.repository }}/backend:latest \
-            .
+            backend/spring
 
       - name: Push Docker Image
         run: docker push ghcr.io/${{ github.repository }}/backend:latest
