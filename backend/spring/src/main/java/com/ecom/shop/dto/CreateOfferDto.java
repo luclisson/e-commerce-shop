@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class CreateOfferDto {
     int categoryId;
-    int sellerId;
+    String sellerUsername;
     String title;
     String description;
     int price; //in cents

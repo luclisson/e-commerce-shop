@@ -5,11 +5,13 @@ import com.ecom.shop.type.PaymentMethod;
 import com.ecom.shop.type.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-
+import org.springframework.data.domain.Pageable;
 import java.util.Date;
+import java.util.List;
 
-public interface OrderRepo extends JpaRepository<Order, Integer> {
+public interface OrderRepo extends JpaRepository<Order, Integer> , CrudRepository<Order,Integer> {
         @Query(value = """
         SELECT nichtdiebohne.create_mixed_order(
             _account_buyer_id    := :account_buyer_id,
@@ -45,17 +47,28 @@ public interface OrderRepo extends JpaRepository<Order, Integer> {
                 @Param("ecommerce_product_id") Integer[] ecommerce_product_id,
                 @Param("ecomm_quantity") int[] ecommQuantity
         );
-/*
     @Query(value = """
-        SELECT o.orderId FROM Order o WHERE 
-        (:orderDate::date IS NULL OR o.date = :orderDate) AND 
-        (:buyerId IS NULL OR o.buyerId = :buyerId) AND 
-        (:status IS NULL OR o.status = :status)
+        SELECT o.orderId FROM Order o
+         inner join OrderItem oi on o.orderId = oi.orderId
+         where
+         oi.productShId = :productId AND
+         o.date = :orderDate AND 
+         o.buyerId = :buyerId AND 
+         o.status = :status 
+         
     """)
-    int findOrderIdByFilter(
+    List<Integer> findOrderIdByFilter(
+            @Param("productId") int productId,
             @Param("orderDate") Date orderDate,
             @Param("buyerId") Integer buyerId,
-            @Param("status") Status status
+            @Param("status") Status status,
+            Pageable pageable
     );
- */
+
+    @Query(value = """
+        Select nichtdiebohne.cancel_order(
+            p_order_id := :orderId
+        )
+    """,nativeQuery = true)
+    void cancelOrderByID(@Param("orderId") Integer orderId);
 }

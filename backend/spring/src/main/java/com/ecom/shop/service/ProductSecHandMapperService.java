@@ -23,7 +23,7 @@ public class ProductSecHandMapperService {
                 p.getPrice(),
                 p.getCondition(),
                 p.getStatus(),
-                productImagesService.getImagesById(p.getProductId())
+                productImagesService.getImagesBySecHandId(p.getProductId())
         );
     }
 }

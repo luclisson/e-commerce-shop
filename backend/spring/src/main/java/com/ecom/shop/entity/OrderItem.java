@@ -7,8 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "order_items")
-public class OrderItems {
+@Table(name = "order_item")
+public class OrderItem {
     @Column(name = "order_item_id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

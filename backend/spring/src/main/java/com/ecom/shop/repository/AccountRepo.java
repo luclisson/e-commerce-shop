@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.sql.Date;
+import java.util.Optional;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account,Integer> {
@@ -26,7 +27,7 @@ public interface AccountRepo extends JpaRepository<Account,Integer> {
     );
 
     @Query(value = "select a from Account a join Credentials c on a.accountId=c.accountId where c.username = :username")
-    Account findByUsername(@Param("username") String username);
+    Optional<Account> findByUsername(@Param("username") String username);
 
 
 
