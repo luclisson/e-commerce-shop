@@ -6,8 +6,10 @@ import com.ecom.shop.repository.OrderRepo;
 import com.ecom.shop.type.PaymentMethod;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.apache.bcel.classfile.JavaClass;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -27,11 +29,17 @@ public class OrderService {
          orderRepo.createOrderEcom(accountId,paymentMethod,ecommerceProductId,ecommerceQuantity);
     }
 
+    //absolut nicht die schoenste loesung aber ich baue aktuell nur um die datenbank herumt
     public void cancelOrderByFilter(FilterOrderDto filter) {
-        int orderId = orderRepo.findOrderIdByFilter(
+        List<Integer> ids = orderRepo.findOrderIdByFilter(
+                filter.getProductId(),
                 filter.getOrderDate(),
                 filter.getBuyerId(),
-                filter.getStatus());
+                filter.getStatus(),
+                PageRequest.of(0,1)
+        );
+        Integer orderId = ids.isEmpty() ? null : ids.get(0);
         logger.info("orderId: " + orderId);
+        orderRepo.cancelOrderByID(orderId);
     }
 }
