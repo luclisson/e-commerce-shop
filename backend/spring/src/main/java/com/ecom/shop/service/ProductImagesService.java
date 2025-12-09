@@ -1,5 +1,6 @@
 package com.ecom.shop.service;
 
+import com.ecom.shop.dto.ProductEcomDto;
 import com.ecom.shop.dto.ProductImageDto;
 import com.ecom.shop.repository.ProductImagesRepo;
 import lombok.RequiredArgsConstructor;

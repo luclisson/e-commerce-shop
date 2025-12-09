@@ -43,5 +43,9 @@ public class ProductController {
     public List<ProductEcomDto> getAllAvailableEcomProducts(){
         return productEcomService.getAllAvailableEcomProducts();
     }
+    @GetMapping("/getEcomById/{id}")
+    public Optional<ProductEcomDto> getEcomById(@PathVariable int id) {
+        return productEcomService.getEcomById(id);
+    }
 
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,5 +19,10 @@ public class ProductEcomService {
         return productEcomRepo.getAllAvailableProducts()
                 .stream().map(productEcomMapperService::productEcomDto)
                 .collect(Collectors.toList());
+    }
+
+    public Optional<ProductEcomDto> getEcomById(int id){
+        return productEcomRepo.findById(id)
+                .map(productEcomMapperService::productEcomDto);
     }
 }
