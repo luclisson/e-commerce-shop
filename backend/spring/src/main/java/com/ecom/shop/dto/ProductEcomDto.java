@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductEcomDto {
     private int productId;
 
-    private Category category;
+    private String category;
 
     private String title;
 

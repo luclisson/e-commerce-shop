@@ -14,9 +14,15 @@ public class ProductImagesService {
     private final ProductImagesRepo productImagesRepo;
     private final ProductImageMapperService productImageMapperService;
 
-    public List<ProductImageDto> getImagesById(Integer id){
+    public List<ProductImageDto> getImagesBySecHandId(Integer id){
         return productImagesRepo.findAllBySecHandId(id)
                                 .stream().map(productImageMapperService::toProductImageDto)
                                 .collect(Collectors.toList());
+    }
+
+    public List<ProductImageDto> getImagesByEcomId(Integer id){
+        return productImagesRepo.findAllByEcomId(id)
+                .stream().map(productImageMapperService::toProductImageDto)
+                .collect(Collectors.toList());
     }
 }

@@ -12,4 +12,9 @@ public interface ProductImagesRepo extends JpaRepository<ProductImage,Integer> {
     List<ProductImage> findAllBySecHandId(
             @Param("productId") Integer productId
             );
+
+    @Query(value = "select pi from ProductImage pi where pi.ecommerceId=:productId")
+    List<ProductImage> findAllByEcomId(
+            @Param("productId") Integer productId
+    );
 }

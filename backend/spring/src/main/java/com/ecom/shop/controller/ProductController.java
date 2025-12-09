@@ -1,8 +1,10 @@
 package com.ecom.shop.controller;
 
 import com.ecom.shop.dto.CreateOfferDto;
+import com.ecom.shop.dto.ProductEcomDto;
 import com.ecom.shop.dto.ProductSecHandDto;
 import com.ecom.shop.dto.ProductFilterDto;
+import com.ecom.shop.service.ProductEcomService;
 import com.ecom.shop.service.ProductSecHandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductSecHandService productSecHandService;
+    private final ProductEcomService productEcomService;
 
     @GetMapping("/getAvailableProducts")
     public List<ProductSecHandDto> getAllProduct(){
@@ -34,6 +37,11 @@ public class ProductController {
     @GetMapping("/getProductById/{id}")
     public Optional<ProductSecHandDto> getProductById(@PathVariable int id){
         return productSecHandService.getProductById(id);
+    }
+
+    @GetMapping("/getAvailableEcom")
+    public List<ProductEcomDto> getAllAvailableEcomProducts(){
+        return productEcomService.getAllAvailableEcomProducts();
     }
 
 }
