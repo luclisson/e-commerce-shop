@@ -12,8 +12,30 @@ const headers = {
 return headers;
 
 }; 
+const categoryMap = {
+    "Siebträgermaschinen": 28,
+    "Kaffeemühlen": 2,
+    "Filter & Co.": 3,
+    "Barista Zubehör": 4,
+    "Reinigung & Pflege": 5,
+    "Tassen & Becher": 6,
+    "Bohnen": 7,
+    "Ersatzteile": 8
+};
 
-// LOGIN
+// Mapping: Condition String -> Integer
+const conditionMap = {
+    "NEW": 0,
+    "LIKE_NEW": 1,
+    "EXCELLENT": 2,
+    "MAX_GOOD": 3,
+    "GOOD": 4,
+    "USED": 5,
+    "DEFECT": 6
+};
+
+// --- AUTHENTIFIZIERUNG ---
+
 export const loginUser = async (username, password) => {
   try {
     const response = await fetch(`${API_BASE_URL}/shop/account/validateLogin`, { 
@@ -34,7 +56,9 @@ export const loginUser = async (username, password) => {
       localStorage.setItem("auth_header", authHeaderValue);
       localStorage.setItem("username", username);
       
-      if (data.userId) localStorage.setItem("userId", data.userId);
+      if (data.userId) {
+          localStorage.setItem("userId", data.userId);
+      }
       
       return true;
     } else {
@@ -46,7 +70,6 @@ export const loginUser = async (username, password) => {
   }
 };
 
-// LOGOUT
 export const logoutUser = () => {
   localStorage.removeItem("auth_header");
   localStorage.removeItem("username"); 
@@ -54,7 +77,6 @@ export const logoutUser = () => {
   window.location.href = "/";
 };
 
-// REGISTRIERUNG
 export const registerUser = async (userData) => {
   const backendPayload = {
     street: userData.street,
@@ -83,9 +105,22 @@ export const registerUser = async (userData) => {
   return text ? (text.startsWith('{') ? JSON.parse(text) : { success: true }) : { success: true };
 };
 
+// --- PRODUKTE & ACCOUNT ---
+
 export const fetchProducts = async () => {
   const headers = { "Content-Type": "application/json" };
-  const response = await fetch(`${API_BASE_URL}/shop/product/getAvailableProducts`, { // Adjusted path based on earlier context, check your backend
+  const response = await fetch(`${API_BASE_URL}/shop/product/getAvailableProducts`, {
+    method: "GET",
+    headers: headers
+  });
+
+  if (!response.ok) throw new Error("Konnte Produkte nicht laden.");
+  return await response.json();
+};
+
+export const fetchEcom = async () => {
+  const headers = { "Content-Type": "application/json" };
+  const response = await fetch(`${API_BASE_URL}/shop/product/getAvailableEcom`, {
     method: "GET",
     headers: headers
   });
@@ -95,7 +130,7 @@ export const fetchProducts = async () => {
 };
 
 export const fetchProductById = async (id) => {
-  const response = await fetch(`${API_BASE_URL}/shop/product/getProductById/${id}`, { // Adjusted path
+  const response = await fetch(`${API_BASE_URL}/shop/product/getProductById/${id}`, {
     method: "GET",
     headers: getHeaders()
   });
@@ -115,6 +150,18 @@ export const fetchAccountPageData = async (username) => {
   return await response.json();
 };
 
+export const updateAccountData = async (accountDto) => {
+  const response = await fetch(`${API_BASE_URL}/shop/account/updateUserData`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(accountDto)
+  });
+  if (!response.ok) throw new Error("Fehler beim Senden der Daten.");
+  return await response.json(); 
+};
+
+// --- WATCHLIST ---
+
 export const fetchWatchlist = async (username) => {
   const response = await fetch(`${API_BASE_URL}/shop/watchlist/getWatchlist/${username}`, {
     method: "GET",
@@ -122,6 +169,24 @@ export const fetchWatchlist = async (username) => {
   });
   if (!response.ok) throw new Error("Konnte Watchlist nicht laden.");
   return await response.json();
+};
+
+export const fetchUserWatchlist = async () => {
+    const username = localStorage.getItem("username");
+    if (!username) return []; 
+    try {
+        const response = await fetch(`${API_BASE_URL}/shop/watchlist/getWatchlist/${username}`, {
+            method: "GET",
+            headers: getHeaders()
+        });
+        if (response.ok) {
+            const data = await response.json();
+            return data.watchedProducts ? data.watchedProducts.map(p => p.productId) : [];
+        }
+        return [];
+    } catch (error) {
+        return [];
+    }
 };
 
 export const addToWatchlist = async (username, productId) => {
@@ -140,15 +205,58 @@ export const removeFromWatchlist = async (username, productId) => {
     if (!response.ok) throw new Error("Fehler beim Entfernen aus der Watchlist.");
 };
 
-export const updateAccountData = async (accountDto) => {
-  const response = await fetch(`${API_BASE_URL}/shop/account/updateUserData`, {
+// --- CREATE OFFER  ---
+
+export const createOffer = async (offerData) => {
+  // 1. Username statt ID
+  const username = localStorage.getItem("username");
+  
+  if (!username) {
+      throw new Error("Du bist nicht eingeloggt (Username fehlt).");
+  }
+
+  // 2. IDs ermitteln
+  const catId = categoryMap[offerData.category] || 1;
+  const condId = conditionMap[offerData.condition] !== undefined 
+                 ? conditionMap[offerData.condition] 
+                 : 3;
+
+  // 3. Bilder Arrays vorbereiten
+  const imgUrls = offerData.imageUrl ? [offerData.imageUrl] : [];
+  const altTexts = offerData.imageUrl ? [offerData.title] : [];
+
+  // 4. Payload exakt nach deiner Vorgabe
+  const payload = {
+    categoryId: catId,                  // int
+    sellerUsername: username,           // string
+    title: offerData.title,             // string
+    description: offerData.description, // string
+    price: Math.round(parseFloat(offerData.price) * 100), // int (Cents)
+    amount: 1,                          // int
+    condition: condId,                  // int
+    imageUrls: imgUrls,                 // Array<String>
+    alts: altTexts,                     // Array<String>
+    mainIndex: 0                        // int
+  };
+
+  console.log("Sende Payload an Backend:", JSON.stringify(payload, null, 2));
+
+  const response = await fetch(`${API_BASE_URL}/shop/offer/createOffer`, { 
     method: "POST",
     headers: getHeaders(),
-    body: JSON.stringify(accountDto)
+    body: JSON.stringify(payload)
   });
-  if (!response.ok) throw new Error("Fehler beim Senden der Daten.");
-  return await response.json(); 
+
+  if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      console.error("Backend Error:", errorText);
+      throw new Error("Fehler beim Erstellen des Inserats.");
+  }
+  
+  return true; 
 };
+
+// --- KAUFEN ---
 
 export const buySecondHandProduct = async (productId, paymentMethod = "PAYPAL") => {
     const username = localStorage.getItem("username");
@@ -184,7 +292,7 @@ export const buyEcomProduct = async (productId, quantity = 1, paymentMethod = "P
         quantity: quantity
     };
 
-    const response = await fetch(`${API_BASE_URL}/order/createOrder/ecom`, {
+    const response = await fetch(`${API_BASE_URL}/shop/order/createOrder/ecom`, {
         method: "POST",
         headers: getHeaders(),
         body: JSON.stringify(payload)
@@ -192,4 +300,18 @@ export const buyEcomProduct = async (productId, quantity = 1, paymentMethod = "P
 
     if (!response.ok) throw new Error("Kauf fehlgeschlagen (E-Commerce).");
     return true;
+};
+
+export const fetchEcomProductById = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/shop/product/getEcomById/${id}`, {
+    method: "GET",
+    headers: getHeaders()
+  });
+
+  if (!response.ok) {
+      throw new Error("E-Com Produkt konnte nicht geladen werden.");
+  }
+  
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
 };

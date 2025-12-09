@@ -103,15 +103,22 @@ export default function Watchlist() {
 
                     const displayCondition = conditionMapping[item.condition] || item.condition;
 
+                    const isEcom = item.stock !== undefined && item.stock !== null;
+                    const type = isEcom ? 'ecom' : 'secondhand';
+
+                    const categoryLabel = isEcom ? "Originals" : displayCondition;
+
                     return (
                         <div key={item.productId} className="h-full">
                             <ProductCard 
                                 id={item.productId} 
                                 title={item.title}
                                 price={priceValue}      
-                                category={displayCondition}
+                                category={categoryLabel}
                                 imageUrl={imageUrl}
                                 
+                                productType={type}
+
                                 isLiked={true} 
                                 onToggleLike={() => handleRemoveItem(item.productId)}
                             />

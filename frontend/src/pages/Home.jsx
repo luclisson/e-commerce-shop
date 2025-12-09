@@ -22,7 +22,7 @@ export default function Home() {
             <Link to="/marketplace" className="bg-orange-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-orange-500 transition-all shadow-lg hover:shadow-orange-900/20 hover:text-white transform hover:-translate-y-1">
                 Jetzt stöbern
             </Link>
-            <Link to="/account" className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 hover:text-white transition-all hover:-translate-y-1">
+            <Link to="/sell" className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 hover:text-white transition-all hover:-translate-y-1">
                 Equipment verkaufen
             </Link>
           </div>

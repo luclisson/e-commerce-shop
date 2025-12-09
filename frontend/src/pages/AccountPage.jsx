@@ -8,6 +8,8 @@ import {
     removeFromWatchlist 
 } from '../services/api';
 import ProductCard from '../components/ProductCard';
+// WICHTIG: LoginModal importieren
+import LoginModal from '../components/LoginModal';
 
 export default function AccountPage() {
   const [userData, setUserData] = useState({
@@ -32,6 +34,7 @@ export default function AccountPage() {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const conditionMapping = {
     NEW: "Neu", LIKE_NEW: "Wie neu", EXCELLENT: "Exzellent",
@@ -159,11 +162,25 @@ export default function AccountPage() {
     );
   }
   
+  // LOGIC FÜR NICHT EINGELOGGTE USER (MODAL STATT REDIRECT)
   if (!localStorage.getItem("username")) {
     return (
       <div className="max-w-5xl mx-auto px-6 py-20 text-center">
           <h1 className="text-3xl font-black text-stone-900 mb-4">Bitte melde dich an</h1>
-          <Link to="/login" className="text-orange-600 font-bold hover:underline">Zum Login →</Link>
+          <p className="text-stone-600 mb-8">Du musst eingeloggt sein, um dein Profil zu sehen.</p>
+          
+          <button 
+            onClick={() => setIsLoginOpen(true)}
+            className="bg-orange-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-orange-700 transition-colors shadow-lg"
+          >
+            Jetzt einloggen
+          </button>
+
+          <LoginModal 
+            isOpen={isLoginOpen} 
+            onClose={() => setIsLoginOpen(false)}
+            onLoginSuccess={() => window.location.reload()} 
+          />
       </div>
     );
   }
@@ -341,16 +358,20 @@ export default function AccountPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {myOffers.map((product) => {
                 const displayCondition = conditionMapping[product.condition] || product.condition;
-                const id = product.offerId || product.id;
                 
+                const id = product.productId || product.id || product.offerId;
+                
+                const type = 'secondhand';
+
                 return (
-                    <div key={id} className="h-full">
+                    <div key={id || Math.random()} className="h-full">
                         <ProductCard 
                             id={id}
                             title={product.title}
                             price={(product.price / 100).toFixed(2)}
                             category={displayCondition}
                             imageUrl={product.images && product.images.length > 0 ? product.images[0].imageUrl : null}
+                            productType={type}
                         />
                     </div>
                 );

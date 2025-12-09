@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function ProductCard({ id, title, price, category, imageUrl, isLiked, onToggleLike }) {
+export default function ProductCard({ id, title, price, category, imageUrl, isLiked, onToggleLike, productType = 'secondhand' }) {
   const fallbackImage = "https://placehold.co/600x600?text=Kein+Bild";
 
   const handleLikeClick = (e) => {
@@ -12,10 +12,13 @@ export default function ProductCard({ id, title, price, category, imageUrl, isLi
     }
   };
 
+  const linkTarget = `/product/${id}?type=${productType}`;
+
   return (
-    <Link to={`/product/${id}`} className="block h-full relative group">
+    <Link to={linkTarget} className="block h-full relative group">
       <div className="bg-white border border-stone-200 rounded-xl overflow-hidden hover:shadow-lg transition-all group h-full flex flex-col">
         
+        {/* Image Area */}
         <div className="aspect-square bg-stone-100 relative overflow-hidden">
            <img 
               src={imageUrl || fallbackImage}
@@ -27,6 +30,7 @@ export default function ProductCard({ id, title, price, category, imageUrl, isLi
               }}
            />
            
+           {/* Category Badge (Top Right) */}
            <span className="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-bold text-stone-800 shadow-sm">
              {category}
            </span>
@@ -40,12 +44,14 @@ export default function ProductCard({ id, title, price, category, imageUrl, isLi
            )}
         </div>
 
+        {/* Info Area */}
         <div className="p-4 flex-1 flex flex-col justify-between">
             <h3 className="font-bold text-stone-900 line-clamp-1 mb-2">{title}</h3>
             
             <div className="flex justify-between items-end mt-auto">
                 <p className="text-orange-600 font-black text-lg">{price} €</p>
                 
+                {/* Action Button (Bottom Right) */}
                 <button 
                     onClick={handleLikeClick}
                     className={`text-xs font-bold uppercase tracking-wide transition-all px-2 py-1 rounded ${

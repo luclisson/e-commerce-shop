@@ -9,6 +9,7 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 import Watchlist from './pages/Watchlist';
 import Ecommerce from './pages/Ecommerce';
 import BuyConfirmationModal from './components/BuyConfirmationModal';
+import SellSecondHand from './pages/SellSecondHand';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/watchlist" element={<Watchlist />} />
           <Route path="/product/:id" element={<ProductDetailsPage />} />
           <Route path="/shop" element={<Ecommerce />} />
+          <Route path="/sell" element={<SellSecondHand />} />
         </Routes>
       </main>
 
