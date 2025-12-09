@@ -1,6 +1,7 @@
 package com.ecom.shop.service;
 
 import com.ecom.shop.dto.WatchlistDto;
+import com.ecom.shop.entity.Account;
 import com.ecom.shop.entity.Watchlist;
 import com.ecom.shop.repository.AccountRepo;
 import com.ecom.shop.repository.ProductSecHandRepo;
@@ -22,13 +23,13 @@ public class WatchlistService {
     }
     public void addToWatchlist(String username, Integer productId){
         Watchlist watchlistItem = new Watchlist();
-        watchlistItem.setAccountId(accountRepo.findByUsername(username).getAccountId());
+        watchlistItem.setAccountId(accountRepo.findByUsername(username).map(Account::getAccountId).orElseThrow());
         watchlistItem.setProduct(productSecHandRepo.findById(productId).orElseThrow());
         watchlistRepo.save(watchlistItem);
     }
 
     public void removeFromWatchlist(String username, Integer productId){
-        int accountId = accountRepo.findByUsername(username).getAccountId();
+        int accountId = accountRepo.findByUsername(username).map(Account::getAccountId).orElseThrow();
         Watchlist watchlistItem = watchlistRepo.getWatchlistByUsername(username).stream()
                 .filter(w -> w.getProduct().getProductId() == productId && w.getAccountId() == accountId)
                 .findFirst()

@@ -19,6 +19,7 @@ public class ProductSecHandService {
     private final ProductSecHandRepo productSecHandRepo;
     private final ProductSecHandMapperService productSecHandMapperService;
     private final ProductSpecification productSpecification;
+    private final AccountService accountService;
 
     public List<ProductSecHandDto> getAllAvailableOffers(){
         return productSecHandRepo.getAllAvailableProducts()
@@ -45,7 +46,9 @@ public class ProductSecHandService {
     public void createProduct(CreateOfferDto offer){
         productSecHandRepo.createProduct(
                 offer.getCategoryId(),
-                offer.getSellerId(),
+                accountService.getAccountByUsername(offer.getSellerUsername())
+                        .map(o -> o.getAccountId())
+                        .orElseThrow(),
                 offer.getTitle(),
                 offer.getDescription(),
                 offer.getPrice(),

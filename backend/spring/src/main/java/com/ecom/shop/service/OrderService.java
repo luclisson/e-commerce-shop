@@ -1,6 +1,7 @@
 package com.ecom.shop.service;
 
 import com.ecom.shop.dto.FilterOrderDto;
+import com.ecom.shop.entity.Account;
 import com.ecom.shop.repository.AccountRepo;
 import com.ecom.shop.repository.OrderRepo;
 import com.ecom.shop.type.PaymentMethod;
@@ -20,12 +21,12 @@ public class OrderService {
     private static final Logger logger = Logger.getLogger(JavaClass.class.getName());
 
     public void createOrderSecHand(String accountUsername, PaymentMethod paymentMethod, Integer[] secondhandProductId, int[] secondhandQuantity) {
-        int accountId = accountRepo.findByUsername(accountUsername).getAccountId();
+        int accountId = accountRepo.findByUsername(accountUsername).map(Account::getAccountId).orElseThrow();
          orderRepo.createOrderSecHand(accountId,paymentMethod,secondhandProductId,secondhandQuantity);
     }
 
     public void createOrderEcom(String accountUsername, PaymentMethod paymentMethod, Integer[] ecommerceProductId, int[] ecommerceQuantity) {
-        int accountId = accountRepo.findByUsername(accountUsername).getAccountId();
+        int accountId = accountRepo.findByUsername(accountUsername).map(Account::getAccountId).orElseThrow();
          orderRepo.createOrderEcom(accountId,paymentMethod,ecommerceProductId,ecommerceQuantity);
     }
 
